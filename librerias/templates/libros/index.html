@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+  <h1>Biblioteca</h1>
+  <p>Mostrando {{ libros_per_page }} libros por página</p>
+  <div class="row">
+    {% for libro in libros %}
+      <div class="col-md-4">
+        <div class="libro">
+          <h2>{{ libro.titulo }}</h2>
+          <img src="{{ libro.imagen_url }}" alt="{{ libro.titulo }}" width="140px">
+          <p>{{ libro.autor }}</p>
+          <p>Precio: ${{ libro.precio }}</p>
+          <form method="POST" action="{% url 'agregar_carrito' libro.id %}">
+            {% csrf_token %}
+            {{ agregar_form.cantidad }}
+            <button type="submit" class="btn btn-success">Agregar al carrito</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="pagination">
+        <span class="step-links">
+          {% if libros.has_previous %}
+              <a href="?page=1&libros_per_page={{ libros_per_page }}">Primera</a>
+              <a href="?page={{ libros.previous_page_number }}&libros_per_page={{ libros_per_page }}">Anterior</a>
+          {% endif %}
+
+      <span class="current-page">
+          Página {{ libros.number }} de {{ libros.paginator.num_pages }}
+      </span>
+
+      {% if libros.has_next %}
+          <a href="?page={{ libros.next_page_number }}&libros_per_page={{ libros_per_page }}">Siguiente</a>
+          <a href="?page={{ libros.paginator.num_pages }}&libros_per_page={{ libros_per_page }}">Última</a>
+      {% endif %}
+    </span>
+  </div>
+</div>
+<div class="col-md-4">
+  <div class="dropdown text-end">
+    <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      Items por pagina
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li><a class="dropdown-item" href="?page={{ page }}&libros_per_page=5">5</a></li>
+      <li><a class="dropdown-item" href="?page={{ page }}&libros_per_page=10">10</a></li>
+      <li><a class="dropdown-item" href="?page={{ page }}&libros_per_page=15">15</a></li>
+    </ul>
+  </div>
+</div>
+  </div>
+{% endblock %}

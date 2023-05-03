@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Carrito</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Cantidad</th>
+      <th>Precio unitario</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for producto in productos %}
+    <tr>
+      <td>{{ producto.producto.nombre }}</td>
+      <td>{{ producto.cantidad }}</td>
+      <td>{{ producto.producto.precio|floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3" class="text-right"><strong>Total:</strong></td>
+    </tr>
+  </tbody>
+</table>
+<form method="post" action="{% url 'enviar_correo' %}">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" name="nombre">
+  </div>
+  <div class="form-group">
+    <label for="apellido">Apellido</label>
+    <input type="text" class="form-control" id="apellido" name="apellido">
+  </div>
+  <div class="form-group">
+    <label for="correo">Correo electrónico</label>
+    <input type="email" class="form-control" id="correo" name="correo">
+  </div>
+  <div class="form-check">
+    <input type="checkbox" class="form-check-input" id="aceptar_condiciones" name="aceptar_condiciones">
+    <label class="form-check-label" for="aceptar_condiciones">Acepto las condiciones</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Comprar</button>
+</form>
+{% endblock %}
+
+
